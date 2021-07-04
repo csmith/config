@@ -60,3 +60,18 @@ func (c *Config) Save(i interface{}) error {
 
 	return os.WriteFile(c.path, b, os.FileMode(0600))
 }
+
+// Load is a convenience method that creates a new Config with the given options, and then immediately loads
+// the config into the target struct.
+func Load(target interface{}, o... Option) (*Config, error) {
+	c, err := New(o...)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := c.Load(target); err != nil {
+		return nil, err
+	}
+
+	return c, nil
+}

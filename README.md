@@ -22,15 +22,13 @@ type MyAppConfig struct {
 }
 
 func main() {
-	// config.New() can take options to customise the directory, filename, etc.
-	c, err := config.New()
-	if err != nil {
-		panic(err)
-	}
-
-	// config.Load will load the config from disk if it exists.
 	conf := &MyAppConfig{}
-	if err := c.Load(conf); err != nil {
+	
+	// config.Load() can take options to customise the directory, filename, etc.
+	// If you don't want to immediately load the config, you can use config.New(),
+	// then call .Load on the config struct at a later time.
+	c, err := config.Load(conf)
+	if err != nil {
 		panic(err)
 	}
 
