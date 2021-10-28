@@ -58,7 +58,7 @@ func newOptions(o []Option) *options {
 	c := &options{
 		filename:      "config.yml",
 		fileMode:      os.FileMode(0600),
-		directory:     os.Args[0],
+		directory:     filepath.Base(os.Args[0]),
 		directoryMode: os.FileMode(0700),
 	}
 
