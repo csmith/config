@@ -61,6 +61,11 @@ func (c *Config) Save(i interface{}) error {
 	return os.WriteFile(c.path, b, os.FileMode(0600))
 }
 
+// Directory returns the directory where the config file is stored.
+func (c *Config) Directory() string {
+    return filepath.Dir(c.path)
+}
+
 // Load is a convenience method that creates a new Config with the given options, and then immediately loads
 // the config into the target struct.
 func Load(target interface{}, o... Option) (*Config, error) {
