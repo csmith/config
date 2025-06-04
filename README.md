@@ -5,7 +5,7 @@ This package provides a simple configuration wrapper that marshals and unmarshal
 
 Features:
 
-* Only one dependency - `gopkg.in/yaml.v2` for yaml marshalling
+* Only one dependency - `github.com/goccy/go-yaml` for yaml marshalling
 * Stores files in the correct config directory by default, across OSes
 * Sensible defaults let you get on with more important things
 
