@@ -1,5 +1,7 @@
 module github.com/csmith/config
 
-go 1.16
+go 1.21.0
 
-require gopkg.in/yaml.v2 v2.4.0
+toolchain go1.24.3
+
+require github.com/goccy/go-yaml v1.18.0
