@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.4.0 - 2026-05-03
+
+### New features
+
+* Added a `DefaultConfig` option to provide a way to deploy a config
+  if one doesn't exist.
+
+### Changes
+
+* Dependency updates
+
 ## 1.3.0 - 2025-07-04
 
 ### Changes

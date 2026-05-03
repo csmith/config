@@ -1,6 +1,7 @@
 package config
 
 import (
+	"io"
 	"os"
 	"path/filepath"
 )
@@ -37,12 +38,24 @@ func Permissions(directoryMode os.FileMode, fileMode os.FileMode) Option {
 	}
 }
 
+// DefaultConfig provides a default config file to write if one doesn't already exist.
+//
+// The config is written verbatim when [config.Load] is called, so it can be used for
+// deploying example configs with documentation comments.
+func DefaultConfig(fn func() io.Reader) Option {
+	return func(o *options) {
+		o.defaultConfig = fn
+	}
+}
+
 type options struct {
 	directory     string
 	directoryMode os.FileMode
 
 	filename string
 	fileMode os.FileMode
+
+	defaultConfig func() io.Reader
 }
 
 func (o *options) path() (string, error) {
@@ -60,6 +73,7 @@ func newOptions(o []Option) *options {
 		fileMode:      os.FileMode(0600),
 		directory:     filepath.Base(os.Args[0]),
 		directoryMode: os.FileMode(0700),
+		defaultConfig: nil,
 	}
 
 	for i := range o {

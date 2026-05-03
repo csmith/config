@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"io"
 	"os"
 	"path/filepath"
 
@@ -35,12 +36,39 @@ func New(o ...Option) (*Config, error) {
 
 // Load reads the config file from disk, if it exists, and unmarshals it into the target struct.
 // If the file does not exist on disk, no changes will be made to the target but no error will be returned.
+// If a DefaultConfig option was provided and the file does not exist, the default config will be written to disk
+// and then unmarshalled into the target.
 func (c *Config) Load(target any) error {
 	b, err := os.ReadFile(c.path)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
+			if c.defaultConfig != nil {
+				return c.loadDefault(target)
+			}
 			return nil
 		}
+		return err
+	}
+
+	return yaml.Unmarshal(b, target)
+}
+
+func (c *Config) loadDefault(target any) error {
+	r := c.defaultConfig()
+	if r == nil {
+		return nil
+	}
+
+	b, err := io.ReadAll(r)
+	if err != nil {
+		return err
+	}
+
+	if err := os.MkdirAll(filepath.Dir(c.path), c.directoryMode); err != nil {
+		return err
+	}
+
+	if err := os.WriteFile(c.path, b, c.fileMode); err != nil {
 		return err
 	}
 
@@ -54,11 +82,11 @@ func (c *Config) Save(i any) error {
 		return err
 	}
 
-	if err := os.MkdirAll(filepath.Dir(c.path), os.FileMode(0700)); err != nil {
+	if err := os.MkdirAll(filepath.Dir(c.path), c.directoryMode); err != nil {
 		return err
 	}
 
-	return os.WriteFile(c.path, b, os.FileMode(0600))
+	return os.WriteFile(c.path, b, c.fileMode)
 }
 
 // Directory returns the directory where the config file is stored.

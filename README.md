@@ -53,13 +53,19 @@ func main() {
 
 A small set of options can be passed to `config.New()` and `config.Load()`:
 
+### `config.DefaultConfig(fn func() io.Reader)`
+
+Provides a default configuration file to deploy if one doesn't exist on the file system
+when `Load` is called. The config is copied verbatim, so comments and formatting is
+preserved.
+
 ### `config.DirectoryName(string)`
 
 Sets the name of the directory to use. This is always rooted below the user's configuration directory.
 For example, setting the directory name to "myapp" would store a config file at `~/.config/myapp/config.yml`
 on Linux.
 
-If not specified, defaults to `argv[0]`, i.e. the name of the binary being executed.
+If not specified, defaults to using the name of the binary being executed from `argv[0]`.
 
 ### `config.FileName(string)`
 
