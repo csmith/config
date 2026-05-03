@@ -35,7 +35,7 @@ func New(o ...Option) (*Config, error) {
 
 // Load reads the config file from disk, if it exists, and unmarshals it into the target struct.
 // If the file does not exist on disk, no changes will be made to the target but no error will be returned.
-func (c *Config) Load(target interface{}) error {
+func (c *Config) Load(target any) error {
 	b, err := os.ReadFile(c.path)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
@@ -48,7 +48,7 @@ func (c *Config) Load(target interface{}) error {
 }
 
 // Save marshals and writes the config file to disk. If the config directory does not exist it will be created.
-func (c *Config) Save(i interface{}) error {
+func (c *Config) Save(i any) error {
 	b, err := yaml.Marshal(i)
 	if err != nil {
 		return err
@@ -68,7 +68,7 @@ func (c *Config) Directory() string {
 
 // Load is a convenience method that creates a new Config with the given options, and then immediately loads
 // the config into the target struct.
-func Load(target interface{}, o ...Option) (*Config, error) {
+func Load(target any, o ...Option) (*Config, error) {
 	c, err := New(o...)
 	if err != nil {
 		return nil, err

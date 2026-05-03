@@ -51,7 +51,7 @@ func main() {
 
 ## Options
 
-A small set of options can be passed to `config.New()`:
+A small set of options can be passed to `config.New()` and `config.Load()`:
 
 ### `config.DirectoryName(string)`
 
@@ -76,4 +76,4 @@ owner only).
 
 ## Contributes
 
-Feedback, questions, pull requests and bug reports are welcome! Please raise an issue on GitHub. 
+Feedback, questions, pull requests and bug reports are welcome! Please raise an issue on GitHub.
