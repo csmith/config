@@ -54,6 +54,22 @@ func (c *Config) Load(target any) error {
 	return yaml.Unmarshal(b, target)
 }
 
+// Save marshals and writes the config file to disk. If the config directory does not exist it will be created.
+// The file is replaced atomically, so a failed write leaves the previous config intact.
+func (c *Config) Save(i any) error {
+	b, err := yaml.Marshal(i)
+	if err != nil {
+		return err
+	}
+
+	return c.write(b)
+}
+
+// Directory returns the directory where the config file is stored.
+func (c *Config) Directory() string {
+	return filepath.Dir(c.path)
+}
+
 func (c *Config) loadDefault(target any) error {
 	r := c.defaultConfig()
 	if r == nil {
@@ -70,22 +86,6 @@ func (c *Config) loadDefault(target any) error {
 	}
 
 	return yaml.Unmarshal(b, target)
-}
-
-// Save marshals and writes the config file to disk. If the config directory does not exist it will be created.
-// The file is replaced atomically, so a failed write leaves the previous config intact.
-func (c *Config) Save(i any) error {
-	b, err := yaml.Marshal(i)
-	if err != nil {
-		return err
-	}
-
-	return c.write(b)
-}
-
-// Directory returns the directory where the config file is stored.
-func (c *Config) Directory() string {
-	return filepath.Dir(c.path)
 }
 
 func (c *Config) write(b []byte) error {
