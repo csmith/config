@@ -74,8 +74,9 @@ need to load multiple configuration files for one application.
 
 ### `config.Permissions(os.FileMode, os.FileMode)`
 
-Changes the permissions that will be used for newly created directories and files, respectively.
-Existing directories and files will not have their permissions changed.
+Changes the permissions that will be used for the config directory and file, respectively.
+The file is given this mode every time it is written; an existing directory will not have its
+permissions changed.
 
 If not specified, defaults to 0700 for directories and 0600 for files (i.e., read/write for the
 owner only).

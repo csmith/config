@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"chameth.com/x/file"
 	"github.com/goccy/go-yaml"
 )
 
@@ -64,11 +65,7 @@ func (c *Config) loadDefault(target any) error {
 		return err
 	}
 
-	if err := os.MkdirAll(filepath.Dir(c.path), c.directoryMode); err != nil {
-		return err
-	}
-
-	if err := os.WriteFile(c.path, b, c.fileMode); err != nil {
+	if err := c.write(b); err != nil {
 		return err
 	}
 
@@ -76,22 +73,27 @@ func (c *Config) loadDefault(target any) error {
 }
 
 // Save marshals and writes the config file to disk. If the config directory does not exist it will be created.
+// The file is replaced atomically, so a failed write leaves the previous config intact.
 func (c *Config) Save(i any) error {
 	b, err := yaml.Marshal(i)
 	if err != nil {
 		return err
 	}
 
-	if err := os.MkdirAll(filepath.Dir(c.path), c.directoryMode); err != nil {
-		return err
-	}
-
-	return os.WriteFile(c.path, b, c.fileMode)
+	return c.write(b)
 }
 
 // Directory returns the directory where the config file is stored.
 func (c *Config) Directory() string {
 	return filepath.Dir(c.path)
+}
+
+func (c *Config) write(b []byte) error {
+	if err := os.MkdirAll(filepath.Dir(c.path), c.directoryMode); err != nil {
+		return err
+	}
+
+	return file.Write(c.path, b, c.fileMode)
 }
 
 // Load is a convenience method that creates a new Config with the given options, and then immediately loads

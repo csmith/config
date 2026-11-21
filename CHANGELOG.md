@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Config files are now written atomically, so a crash or full disk can't
+  leave a truncated file; existing files now get the configured file mode
+- Require Go 1.27.4 or later
+
 ## 1.4.0 - 2026-05-03
 
 ### New features

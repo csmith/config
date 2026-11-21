@@ -27,8 +27,9 @@ func FileName(n string) Option {
 	}
 }
 
-// Permissions sets the filesystem permissions that will be set on newly created directories and files.
-// Existing permissions will not be modified.
+// Permissions sets the filesystem permissions for the config directory and file.
+// The config file is given this mode every time it is written. The directory's mode is only
+// set when it is created; an existing directory's permissions will not be modified.
 //
 // If not specified, defaults to 0700 for directories and 0600 for files.
 func Permissions(directoryMode os.FileMode, fileMode os.FileMode) Option {
